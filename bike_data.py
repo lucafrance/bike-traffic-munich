@@ -1,4 +1,5 @@
 import os
+import sys
 import shutil
 import logging
 
@@ -13,10 +14,9 @@ logging.basicConfig(
     level=logging.DEBUG)
 
 
-def reset_directories():
-    for dir_name in ["csv", "dataset"]:
-        shutil.rmtree(dir_name, ignore_errors=True)
-        os.mkdir(dir_name)
+def reset_directory(dir_name):
+    shutil.rmtree(dir_name, ignore_errors=True)
+    os.mkdir(dir_name)
     return
     
     
@@ -91,14 +91,25 @@ def build_dataset():
     
     
 if __name__ == "__main__":
-    try:
-        reset_directories()
-        download_csv()
-        build_dataset()
-    except Exception as e:
-        logging.error("Dataset update failed. {}".format(e))
+    
+    help_msg = "Run the script with the argument \"d\" to download the csv files, \"b\" to build the dataset and \"db\" to perform both operations."
+    if len(sys.argv) == 1:
+        print(help_msg)
     else:
-        logging.info("Dataset updated successfully.")
+        args = sys.argv[1]
+        try:
+            if "d" in args:
+                reset_directory("csv")
+                download_csv()
+            if "b" in args:
+                reset_directory("dataset")
+                build_dataset()
+            if "d" not in args and "b" not in args:
+                print(help_msg)
+        except Exception as e:
+            logging.error("Dataset update failed. {}".format(e))
+        else:
+            logging.info("Dataset updated successfully.")
         
     
     
