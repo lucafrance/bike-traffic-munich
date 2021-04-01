@@ -57,26 +57,27 @@ def download_csv():
 def build_dataset():
     
     stations_csv = "radzaehlstellen.csv"
-    os.rename(os.path.join("csv", stations_csv), os.path.join("dataset", stations_csv))
+    shutil.copyfile(os.path.join("csv", stations_csv), os.path.join("dataset", stations_csv))
     csv_data_day = []
     csv_data_15min = []
     filenames = list(os.walk("csv"))[0][2]
     for filename in filenames:
+        if filename == stations_csv:
+            continue
         file_path = os.path.join("csv", filename)
         logging.info("Read data from \"{}\"".format(file_path))
-        df = pd.read_csv(file_path)
+        df = pd.read_csv(file_path, parse_dates=["datum"])
         if "tage" in filename:
             csv_data_day.append(df)
         elif "15min" in filename: 
             csv_data_15min.append(df)
         else:
-            logging.error("Unknown file \"{}\"".filename(file_path))
-        
-    csv_day_concat = pd.concat(csv_data_day, ignore_index=True)
-    csv_15min_concat = pd.concat(csv_data_15min,ignore_index=True)
-    logging.info("Dataframes concatenated.")
+            logging.error("Unknown file \"{}\"".format(file_path))
     
-    #TODO Datum format is incosistent in July 2019: DD.MM.YYYY instead of YYYY.MM.TT 
+    args = {"ignore_index": True}
+    csv_day_concat = pd.concat(csv_data_day, **args)
+    csv_15min_concat = pd.concat(csv_data_15min, **args)
+    logging.info("Dataframes concatenated.")
     
     sort_clms = ["datum", "uhrzeit_start", "zaehlstelle"]
     csv_day_concat.sort_values(sort_clms)
@@ -111,5 +112,4 @@ if __name__ == "__main__":
         else:
             logging.info("Dataset updated successfully.")
         
-    
     
