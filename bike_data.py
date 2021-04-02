@@ -119,6 +119,7 @@ if __name__ == "__main__":
                 print(help_msg)
         except Exception as e:
             logging.error("Dataset update failed. {}".format(e))
+            raise
         else:
             logging.info("Dataset updated successfully.")
         
