@@ -66,7 +66,17 @@ def build_dataset():
             continue
         file_path = os.path.join("csv", filename)
         logging.info("Read data from \"{}\"".format(file_path))
-        df = pd.read_csv(file_path, parse_dates=["datum"])
+        df = pd.read_csv(file_path, dtype={"datum": str, "uhrzeit_start": str, "uhrzeit_ende": str})
+        
+        # Convert dates and times to datetime objects and then back to a consistent string format
+        df["datum"] = pd.to_datetime(df["datum"])
+        df["datum"] = df["datum"].dt.strftime("%Y.%m.%d")
+        for time_clm in ["uhrzeit_start", "uhrzeit_ende"]:
+            # uhrzeit_ende is respresented as 23.59 instead of 23:59 in daily values (radYYYYMMDDtage.csv)
+            df[time_clm] = df[time_clm].str.replace(".", ":", regex=False)
+            df[time_clm] = pd.to_datetime(df[time_clm])
+            df[time_clm] = df[time_clm].dt.strftime("%H:%M")
+        
         if "tage" in filename:
             csv_data_day.append(df)
         elif "15min" in filename: 
