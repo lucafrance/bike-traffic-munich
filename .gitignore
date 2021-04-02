@@ -1,5 +1,5 @@
 venv/
 csv/
-dataset/
+dataset/*.csv
 
 *.log

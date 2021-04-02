@@ -113,7 +113,6 @@ if __name__ == "__main__":
                 reset_directory("csv")
                 download_csv()
             if "b" in args:
-                reset_directory("dataset")
                 build_dataset()
             if "d" not in args and "b" not in args:
                 print(help_msg)
