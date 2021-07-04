@@ -8,10 +8,13 @@ import pandas as pd
 
 
 logging.basicConfig(
-    filename="bike-traffic-munich.log", 
     format="%(asctime)s %(levelname)s %(message)s", 
-    encoding="utf-8", 
-    level=logging.DEBUG)
+    encoding="utf-8",
+    handlers=[
+        logging.FileHandler("bike-traffic-munich.log"),
+        logging.StreamHandler()
+    ],
+    level=logging.INFO)
 
 
 def reset_directory(dir_name):
