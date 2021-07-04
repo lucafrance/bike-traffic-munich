@@ -36,12 +36,17 @@ def download_csv():
         for result in query_result["results"]:
             for resource in result["resources"]:
                 res_name = resource["name"]
-                if query in res_name:
+                keywords = query.split(" ")
+                include = True
+                for keyword in keywords:
+                    if keyword not in res_name:
+                        include = False
+                if include:
                     logging.info("Found resource \"{}\" in the results of query \"{}\".".format(res_name, query))
                     csv_urls.append(resource["url"])
                 else:
                     logging.debug("Ignored resource \"{}\" in the results of query \"{}\".".format(res_name, query))
-    
+                
     # Link to the csv of the resource "Raddauerzählstellen in München"
     # https://www.opengov-muenchen.de/dataset/raddauerzaehlstellen-muenchen/resource/211e882d-fadd-468a-bf8a-0014ae65a393
     csv_urls.append("https://www.opengov-muenchen.de/dataset/aca4bcb6-d0ff-4634-b5b9-8b5d133ab08e/resource/211e882d-fadd-468a-bf8a-0014ae65a393/download/radzaehlstellen.csv")
