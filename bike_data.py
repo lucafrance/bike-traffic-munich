@@ -23,7 +23,7 @@ def reset_directory(dir_name):
 def download_csv():
     
     # Find all urls of the csv files to download. 
-    months = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "October", "November", "Dezember"]
+    months = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"]
     queries = ["Raddauerzählstellen München {} {}".format(month, year) for year in range(2017, 2022) for month in months]
     csv_urls = []
     for query in queries:
