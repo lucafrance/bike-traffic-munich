@@ -10,7 +10,7 @@ This code collects and consolidates for [Kaggle](https://www.kaggle.com) informa
 ### Usage
 * To download the source csv: `python bike_data.py "d"`
 * To build the dataset: `python bike_data.py "b"`
-* To bot download the source csv and build the dataset: `python bike_data.py "db"`
+* To both download the source csv and build the dataset: `python bike_data.py "db"`
 * To upload a new version of the dataset on Kaggle: `kaggle datasets version -m "Updated dataset" -p "./dataset"`
 
 ### Links
