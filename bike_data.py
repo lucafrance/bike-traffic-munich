@@ -98,8 +98,8 @@ def build_dataset():
     logging.info("Dataframes concatenated.")
     
     sort_clms = ["datum", "uhrzeit_start", "zaehlstelle"]
-    csv_day_concat.sort_values(sort_clms)
-    csv_15min_concat.sort_values(sort_clms)
+    csv_day_concat.sort_values(sort_clms, inplace=True)
+    csv_15min_concat.sort_values(sort_clms, inplace=True)
     logging.info("Dataframes sorted.")
     
     csv_15min_concat.to_csv("dataset/rad_15min.csv", index=False)
