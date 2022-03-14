@@ -29,10 +29,15 @@ def download_csv():
     months = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"]
     queries = ["Raddauerzählstellen München {} {}".format(month, year) for year in range(2017, 2023) for month in months]
     csv_urls = []
+    
     for query in queries:
         r = requests.get("https://www.opengov-muenchen.de/api/3/action/package_search", params = {"q": query})
         query_result = r.json()["result"]
-        logging.debug("The query for {} returned {} results.".format(query, query_result["count"]))
+        logging.debug("The query for \"{}\" returned {} results.".format(query, query_result["count"]))
+        
+        query_tageswerte_und_werte_found = False
+        query_15_minuten_werte_found = False
+        
         for result in query_result["results"]:
             for resource in result["resources"]:
                 res_name = resource["name"]
@@ -44,8 +49,19 @@ def download_csv():
                 if include:
                     logging.info("Found resource \"{}\" in the results of query \"{}\".".format(res_name, query))
                     csv_urls.append(resource["url"])
+                    if "Tageswerte und Wetter" in res_name:
+                        query_tageswerte_und_werte_found = True
+                    if "15 Minuten-Werte" in res_name:
+                        query_15_minuten_werte_found = True
                 else:
                     logging.debug("Ignored resource \"{}\" in the results of query \"{}\".".format(res_name, query))
+        
+        if not query_tageswerte_und_werte_found:
+            logging.warning("No valid daily values results for query \"{}\".".format(query))
+        if not query_15_minuten_werte_found:
+            logging.warning("No valid 15-minutes values results for query \"{}\".".format(query))
+        if not (query_tageswerte_und_werte_found and query_15_minuten_werte_found):
+            logging.warning("You might want to check the response to \"{}\".".format(r.url))
                 
     # Link to the csv of the resource "Raddauerzählstellen in München"
     # https://www.opengov-muenchen.de/dataset/raddauerzaehlstellen-muenchen/resource/211e882d-fadd-468a-bf8a-0014ae65a393
