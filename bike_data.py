@@ -96,7 +96,7 @@ def build_dataset():
         df["datum"] = pd.to_datetime(df["datum"])
         df["datum"] = df["datum"].dt.strftime("%Y.%m.%d")
         for time_clm in ["uhrzeit_start", "uhrzeit_ende"]:
-            # uhrzeit_ende is respresented as 23.59 instead of 23:59 in daily values (radYYYYMMDDtage.csv)
+            # uhrzeit_ende is represented as 23.59 instead of 23:59 in daily values (radYYYYMMDDtage.csv)
             df[time_clm] = df[time_clm].str.replace(".", ":", regex=False)
             df[time_clm] = pd.to_datetime(df[time_clm])
             df[time_clm] = df[time_clm].dt.strftime("%H:%M")
