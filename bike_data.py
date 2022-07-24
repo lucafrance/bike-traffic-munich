@@ -62,10 +62,6 @@ def download_csv():
             logging.warning("No valid 15-minutes values results for query \"{}\".".format(query))
         if not (query_tageswerte_und_werte_found and query_15_minuten_werte_found):
             logging.warning("You might want to check the response to \"{}\".".format(r.url))
-    
-    # Link to csv with Typo in the title (Dezmber and not Dezember)
-    # Main page: https://opendata.muenchen.de/dataset/daten-der-raddauerzahlstellen-munchen-dezember-2021
-    csv_urls.append("https://opendata.muenchen.de/dataset/52f49094-6a0b-4db8-88a8-83d0764bb963/resource/43e5cbff-ee71-4999-87fc-33fc89d5a18f/download/rad_2021_12_15min.csv")
 
     # Link to the csv of the resource "Raddauerzählstellen in München"
     # https://www.opengov-muenchen.de/dataset/raddauerzaehlstellen-muenchen/resource/211e882d-fadd-468a-bf8a-0014ae65a393
