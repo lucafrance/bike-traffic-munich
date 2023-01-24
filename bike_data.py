@@ -31,7 +31,7 @@ def download_csv():
     csv_urls = []
     
     for query in queries:
-        r = requests.get("https://www.opengov-muenchen.de/api/3/action/package_search", params = {"q": query})
+        r = requests.get("https://opendata.muenchen.de/api/3/action/package_search", params = {"q": query})
         query_result = r.json()["result"]
         logging.debug("The query for \"{}\" returned {} results.".format(query, query_result["count"]))
         
@@ -65,7 +65,7 @@ def download_csv():
 
     # Link to the csv of the resource "Raddauerzählstellen in München"
     # https://www.opengov-muenchen.de/dataset/raddauerzaehlstellen-muenchen/resource/211e882d-fadd-468a-bf8a-0014ae65a393
-    csv_urls.append("https://www.opengov-muenchen.de/dataset/aca4bcb6-d0ff-4634-b5b9-8b5d133ab08e/resource/211e882d-fadd-468a-bf8a-0014ae65a393/download/radzaehlstellen.csv")
+    csv_urls.append("https://opendata.muenchen.de/dataset/aca4bcb6-d0ff-4634-b5b9-8b5d133ab08e/resource/211e882d-fadd-468a-bf8a-0014ae65a393/download/radzaehlstellen.csv")
                 
     # Download the csv files to the "csv" folder
     for csv_url in csv_urls:
