@@ -94,6 +94,9 @@ def build_dataset():
 
         # Fix inconsistent column names
         df.rename(columns={"max.temp": "max-temp", "min.temp": "min-temp"}, inplace=True)
+
+        # Remove empty column `Unnamed: 0`, which appears in some of the source files
+        df.drop(columns="Unnamed: 0", inplace=True, errors="ignore")
         
         # Convert dates and times to datetime objects and then back to a consistent string format
         
