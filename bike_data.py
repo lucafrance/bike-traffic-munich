@@ -93,12 +93,26 @@ def build_dataset():
         df = pd.read_csv(file_path, dtype={"datum": str, "uhrzeit_start": str, "uhrzeit_ende": str})
         
         # Convert dates and times to datetime objects and then back to a consistent string format
-        df["datum"] = pd.to_datetime(df["datum"], dayfirst=True)
+        
+        # The date format is inconsistent, sometimes dd.mm.yyyy and other times yyyy.mm.dd
+        first_element = next(df["datum"].items())[1]
+        dayfirst = first_element[2] == "."
+        df["datum"] = pd.to_datetime(df["datum"], dayfirst=dayfirst)
         df["datum"] = df["datum"].dt.strftime("%Y.%m.%d")
+
         for time_clm in ["uhrzeit_start", "uhrzeit_ende"]:
-            # uhrzeit_ende is represented as 23.59 instead of 23:59 in daily values (radYYYYMMDDtage.csv)
+            # Fix 'uhrzeit_ende', which is inconsistent with 'uhrzeit_start' (e.g.: 23.59)
             df[time_clm] = df[time_clm].str.replace(".", ":", regex=False)
-            df[time_clm] = pd.to_datetime(df[time_clm])
+            # Fix 'uhrzeit_start', 'uhrzeit_ende' format inconsistencies
+            # sometimes the seconds are included, sometime not
+            first_element = next(df[time_clm].items())[1]
+            format = None
+            if len(first_element) == len("hh:mm:ss"):
+                format = "%H:%M:%S"
+            else:
+                format = "%H:%M"
+
+            df[time_clm] = pd.to_datetime(df[time_clm], format=format)
             df[time_clm] = df[time_clm].dt.strftime("%H:%M")
         
         if "tage" in filename:
