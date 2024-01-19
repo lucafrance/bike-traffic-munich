@@ -91,6 +91,9 @@ def build_dataset():
         file_path = os.path.join("csv", filename)
         logging.info("Read data from \"{}\"".format(file_path))
         df = pd.read_csv(file_path, dtype={"datum": str, "uhrzeit_start": str, "uhrzeit_ende": str})
+
+        # Fix inconsistent column names
+        df.rename(columns={"max.temp": "max-temp", "min.temp": "min-temp"}, inplace=True)
         
         # Convert dates and times to datetime objects and then back to a consistent string format
         
