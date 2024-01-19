@@ -90,7 +90,10 @@ def build_dataset():
             continue
         file_path = os.path.join("csv", filename)
         logging.info("Read data from \"{}\"".format(file_path))
-        df = pd.read_csv(file_path, dtype={"datum": str, "uhrzeit_start": str, "uhrzeit_ende": str})
+        df = pd.read_csv(file_path, dtype={
+            "datum": str, "uhrzeit_start": str, "uhrzeit_ende": str,
+            "richtung_1": "Int32", "richtung_2": "Int32", "gesamt": "Int32",
+        })
 
         # Fix inconsistent column names
         df.rename(columns={"max.temp": "max-temp", "min.temp": "min-temp"}, inplace=True)
